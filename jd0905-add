@@ -1,0 +1,97 @@
+#include<iostream>
+#include <vector>
+#include <math.h>
+
+using namespace  std;
+
+
+//根据2^次方累加和的关系，求出长度
+int lenghOfLuck(int input)
+{
+	int length =1;
+	
+	while (input>(pow(2,length+1) -2))
+	{
+		length++;
+	}
+	return length;
+}
+
+void printNum(vector<int> vecRet)
+{
+	for (int i = 0 ; i < vecRet.size();i++)
+	{
+		if (vecRet[i]==0)
+		{
+			printf("4");
+		}
+		else
+		{
+			printf("7");
+		}
+	}
+	printf("\n");
+}
+
+//当成加法来考虑
+vector<int> addTimes(int addTime ,int length)
+{
+	vector<int> vec(length,0);  //用0模拟4；length位
+	
+	for (int i = 0 ; i <addTime;i++)  //加add time次
+	{
+		//模拟加1
+		int carry = 0; //进位模拟二进制
+		for (int j =length-1;j>=0; j--)
+		{
+			if (j == length -1)  //模拟加一，最后一位
+			{
+				if (vec[j]==1)
+				{
+					vec[j] == 0;
+					carry  = 1;
+				}else
+				{
+					vec[j] = vec[j]+1;
+				}               
+			}
+
+			if (vec[j]==1&&carry==1)
+			{
+				vec[j] = 0 ;
+			}else
+			{
+				vec[j] = vec[j]+carry;
+				carry = 0; //进位为0
+			}
+		}
+	}
+
+	return vec;
+}
+
+/*
+	7和4的组合数为幸运数 ，输入第多少个，输出该幸运数
+	分析，可以简单的利用二进制加法来计算，也可以通过位数关系先计算长度加快。
+*/
+int main()
+{
+	int T ; //组数;
+	cin>>T;
+	while (T--)  
+	{
+		int input;
+		cin>>input;
+		int length = lenghOfLuck(input); //长度
+		
+		int appendNumber = input-(pow(2, length)-2)-1;  //还需要几位，在长度确定时
+
+		vector<int> vecRet = addTimes(appendNumber ,length);
+
+		printNum(vecRet);
+
+	}
+	system("pause");
+
+	return 0;
+}
